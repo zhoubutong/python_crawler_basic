@@ -1,0 +1,19 @@
+#在评论中解决时间格式为 “ xxxx天前 ” 转换为正确时间格式
+import time
+from datetime import datetime
+from datetime import timedelta
+
+
+#这段代码截取于过往工程，只是示例文件,看看就好，不要直接运行
+commenttime0=re.compile(r'<!--<div class="myfoot">(\d+).{2}</div>-->',re.S)
+comment_time0 = re.findall(commenttime0,page)
+#       print comment_time0
+#由于给出的是N天前的时间，需要转换为当前时间
+currentday = datetime.now()
+if len(comment_time0)==0:
+   comment_time = currentday.strftime('%Y-%m-%d')
+else:
+   aday=0-int(comment_time0[0])
+   aDay = timedelta(days=aday)
+   commenttime = currentday + aDay
+   comment_time=commenttime.strftime('%Y-%m-%d')    
