@@ -1,0 +1,12 @@
+#那些可恶的表情符，导致写入数据库经常出错，如果没有必要保存，可以这样过滤掉。但是在文本挖掘中，表情符也是比较重要的情感特征咯，注意场景
+
+if locations==[]:
+    locations=['null']
+try:  
+   # python UCS-4 build的处理方式  
+    highpoints = re.compile(u'[\U00010000-\U0010ffff]')  
+except re.error:  
+   # python UCS-2 build的处理方式  
+    highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')          
+comment_content2 =highpoints.sub(u'??',comment_content[0])
+authors2=highpoints.sub(u'??', authors[0]) 
