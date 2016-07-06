@@ -1,0 +1,9 @@
+import time
+
+def gettime(self):
+    ISOTIMEFORMAT='%Y-%m-%d %X'
+    current_time=time.strftime( ISOTIMEFORMAT, time.localtime() )
+    return current_time   
+
+#使用时直接调用func
+current_time=gettime()
