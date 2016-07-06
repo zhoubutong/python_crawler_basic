@@ -1,0 +1,24 @@
+import MySQLdb
+
+conn=MySQLdb.connect(host='localhost',user='root',passwd='zhou',port=3306,db='mailegou2',charset='utf8')
+cur=conn.cursor()
+cur.execute('set foreign_key_checks=0') #由于数据库有外键约束，进行数据读取存储时需要关闭外键约束
+
+#写入数据 insert
+cur.execute('insert into products(brand_id,product_site_id,product_name,price,sale_num,comment_num,product_url,create_dt) 
+            values(%s,%s,%s,%s,%s,%s,%s,%s)',(brandid,idss,page_intro[1],page_intro[2],page_intro[3],page_intro[4],product_urls,current_time))
+key_productid=int(cur.lastrowid)  #返回最近更新的外键，由于这条语句存在，在考虑并行时候很难正确找到外键
+
+#从数据库读取数据 select+占位符的使用符合python规范
+selectsql="select author_id from authors where author_nickname='%s'"%(rp_names)
+cur.execute(selectsql)                                              
+result = cur.fetchall()  #返回的数据为tuple，注意索引方式
+
+#更新数据 update
+insertsql="update comments set seg_content='%s' where comment_id='%s'"%(c,i)    
+cur.execute(insertsql)
+
+conn.commit()  #提高请求，注意不要频繁提交
+cur.execute('set foreign_key_checks=1')  #打开外键约束
+cur.close()
+conn.close()   #一定要关闭数据库连接哦
