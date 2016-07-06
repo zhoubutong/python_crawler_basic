@@ -1,0 +1,25 @@
+    def getPage(self,pagenum):
+            try:
+                url = self.baseURL+str(pagenum)
+                user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+                #values = {'username' : '1935556799@qq.com',  'password' : '20160401' }
+                #data = urllib.urlencode(values) 
+#                socket.setdefaulttimeout(timeout)
+#                sleep_download_time = 10 
+                headers = { 'User-Agent' : user_agent,'Referer':url }
+                request = urllib2.Request(url,headers = headers)
+#                time.sleep(20) 
+                proxy=self.getip()
+                print proxy
+                opener = urllib2.build_opener( urllib2.ProxyHandler(proxy) )
+                urllib2.install_opener( opener )
+                response = urllib2.urlopen(request)
+                content=response.read()
+                return content.decode('utf-8')
+                response.close()
+                time.sleep(2)
+            except Exception as e:
+                print e
+                time.sleep(2)
+                response=self.getPage(pagenum)
+                return response
