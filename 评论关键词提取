@@ -1,0 +1,33 @@
+import jieba
+import jieba.posseg as pseg
+import time
+import MySQLdb
+from pandas import Series,DataFrame
+import jieba.analyse
+from snownlp import SnowNLP
+
+conn=MySQLdb.connect(host='localhost',user='root',passwd='zhou',port=3306,db='dragonpass',charset='utf8')
+cur=conn.cursor()
+cur.execute('set foreign_key_checks=0')   
+
+#将所有的评论合成一个文档
+content=''
+for i in range(1,49638):
+    selectsql="select seg_content from comments_all where comment_id='%s'"%(i)
+    cur.execute(selectsql) 
+    result = cur.fetchall()
+    content.append(result[0][0])
+    
+content2=content.encode('utf-8')
+f=open('content.txt','w')
+f.write(content2)
+f.close()   
+#基于TF——IDF的关键词提取
+cipin=jieba.analyse.extract_tags(content,topK=1000,withWeight=True)
+cipin2=DataFrame(cipin)
+cipin2.to_excel('foo.xlsx',sheet_name="Sheet1")
+
+#基于TextRank的关键词提取
+TR=jieba.analyse.textrank(content,topK=1000,withWeight=True)
+TR2=DataFrame(TR)
+TR2.to_excel('TR.xlsx',sheet_name="Sheet1")
