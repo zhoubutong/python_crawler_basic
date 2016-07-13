@@ -1,0 +1,14 @@
+#混合、分隔数据集
+#input: dataMatrix---数据集    rate--训练与测试数据样本比
+import random
+def mixSegment(dataMatrix,rate):
+    trainData=[]
+    testData=[]
+    numbers=len(dataMatrix)  //得到样本数目
+    mixSeq=random.shuffle(range(numbers))//得到索引的随机序列
+    thre=(int)(numbers*rate)//得到训练集与测试集的分隔位置
+    for i in range(thre):
+        trainData.append(dataMatrix[mixSeq[i]])
+    for i in range(thre,numbers):
+        testData.append(dataMatrix[mixSeq[i]])
+    return trainData,testData
